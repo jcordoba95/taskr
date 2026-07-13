@@ -203,3 +203,13 @@
 
 **Lecciones Aprendidas:**
 - Cuando un usuario dice "no veo el error en mi código" pero la terminal lanza un error de sintaxis con marcadores de Git, la causa casi siempre es un archivo no guardado en el IDE. Mencionar el "punto blanco en la pestaña" de VS Code es un atajo visual fantástico para diagnosticar esto rápidamente.
+
+## 2026-07-12: Stacked PRs and Merge Conflicts
+
+**Dimensiones Evaluadas:**
+- **Fidelidad:** Alta. Se instruyó al usuario sobre cómo manejar PRs apilados (stacked branches) cuando el primer PR bloquea al segundo.
+- **Profundidad:** Se guiaron los pasos exactos para hacer un `git merge main` en la rama de `feature/list-tasks` después de que la rama original fue aprobada, y se explicó exactamente por qué ocurría el conflicto (lógica JSON vs la lógica del in-memory array con IDs).
+- **Mentorship Evaluation:** Excelente. Se explicó el "por qué" detrás del conflicto antes de dar el código resuelto, reduciendo la ansiedad del usuario frente a los temidos merge conflicts y empoderándolo a solucionarlos con confianza.
+
+**Lecciones Aprendidas:**
+- Cuando ocurren conflictos de fusión complejos donde una rama cambia la arquitectura (lista a JSON) y otra añade metadatos, proporcionar el archivo completo y bien fusionado es mucho más seguro y didáctico para principiantes que hacerles editar marcadores de Git manualmente.
