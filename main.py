@@ -10,7 +10,7 @@ def main():
     add_parser.add_argument("title", type=str, help="The title of the task")
 
     # List command
-    list_parser = subparsers.add_parser("list", help="List all tasks")
+    subparsers.add_parser("list", help="List all tasks")
 
     args = parser.parse_args()
 
