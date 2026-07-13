@@ -2,7 +2,6 @@ import os
 import pytest
 import services.task_service as task_service
 
-# Use a separate test file so we don't mess up real tasks!
 TEST_FILE = "test_tasks.json"
 
 @pytest.fixture(autouse=True)
@@ -22,8 +21,11 @@ def setup_and_teardown():
 
 def test_add_task():
     task = task_service.add_task("Buy groceries")
+    assert task["id"] == 1
     assert task["title"] == "Buy groceries"
     assert task["completed"] is False
+    assert "created_at" in task
+    assert "metadata" in task
 
     # Verify it was saved and can be retrieved
     tasks = task_service.get_tasks()
