@@ -27,7 +27,7 @@ git clone https://github.com/jcordoba95/taskr.git
 cd taskr
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
 
 ## Branching
