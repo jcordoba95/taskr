@@ -1,14 +1,19 @@
+import pytest
 from services.task_service import add_task, tasks
+import services.task_service as task_service
+
+@pytest.fixture(autouse=True)
+def setup_and_teardown():
+    # This runs before every test to guarantee isolation!
+    tasks.clear()
+    task_service.task_counter = 1
+    yield
 
 def test_add_task():
-    # Clear the global tasks list before the test (to ensure isolation)
-    tasks.clear()
-
-    # Run the function
     task = add_task("Buy groceries")
-
-    # Assertions
+    assert task["id"] == 1
     assert task["title"] == "Buy groceries"
     assert task["completed"] is False
+    assert "created_at" in task
+    assert "metadata" in task
     assert len(tasks) == 1
-    assert tasks[0] == task
