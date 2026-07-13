@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-def main():
-    pass
-=======
 import argparse
 from services.task_service import add_task, get_tasks
 
@@ -29,7 +25,6 @@ def main():
             for i, t in enumerate(tasks, 1):
                 status = "[x]" if t.get("completed") else "[ ]"
                 print(f"{i}. {status} {t['title']}")
->>>>>>> Stashed changes
 
 if __name__ == "__main__":
     main()
