@@ -22,9 +22,9 @@ def main():
         if not tasks:
             print("No tasks yet. Add one with: python main.py add <task>")
         else:
-            for i, t in enumerate(tasks, 1):
+            for t in tasks:
                 status = "[x]" if t.get("completed") else "[ ]"
-                print(f"{i}. {status} {t['title']}")
+                print(f"{t['id']}. {status} {t['title']}")
 
 if __name__ == "__main__":
     main()

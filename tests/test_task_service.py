@@ -1,26 +1,19 @@
-import os
 import pytest
-import services.task_service as task_service
-
-TEST_FILE = "test_tasks.json"
+from services.task_service import add_task, get_tasks
+from services import storage
 
 @pytest.fixture(autouse=True)
-def setup_and_teardown():
-    # Before test: point the service to our test file
-    task_service.TASKS_FILE = TEST_FILE
+def setup_and_teardown(tmp_path, monkeypatch):
+    # Create a fake file path inside the guaranteed-empty temporary folder
+    fake_file = tmp_path / "test_tasks.json"
+    
+    # Swap out the real TASKS_FILE variable in storage.py with our fake one
+    monkeypatch.setattr(storage, "TASKS_FILE", str(fake_file))
 
-    # Make sure we start with a clean slate
-    if os.path.exists(TEST_FILE):
-        os.remove(TEST_FILE)
-
-    yield # This runs the actual test
-
-    # After test: clean up the test file
-    if os.path.exists(TEST_FILE):
-        os.remove(TEST_FILE)
+    # We don't need a cleanup step anymore, Pytest deletes tmp_path automatically
 
 def test_add_task():
-    task = task_service.add_task("Buy groceries")
+    task = add_task("Buy groceries")
     assert task["id"] == 1
     assert task["title"] == "Buy groceries"
     assert task["completed"] is False
@@ -28,11 +21,11 @@ def test_add_task():
     assert "metadata" in task
 
     # Verify it was saved and can be retrieved
-    tasks = task_service.get_tasks()
+    tasks = get_tasks()
     assert len(tasks) == 1
     assert tasks[0] == task
 
 def test_get_tasks_empty():
     # Should return an empty list if no tasks have been added yet
-    tasks = task_service.get_tasks()
+    tasks = get_tasks()
     assert len(tasks) == 0
