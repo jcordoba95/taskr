@@ -6,7 +6,7 @@ from services import storage
 def setup_and_teardown(tmp_path, monkeypatch):
     # Create a fake file path inside the guaranteed-empty temporary folder
     fake_file = tmp_path / "test_tasks.json"
-    
+
     # Swap out the real TASKS_FILE variable in storage.py with our fake one
     monkeypatch.setattr(storage, "TASKS_FILE", str(fake_file))
 

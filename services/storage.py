@@ -1,4 +1,4 @@
-import json 
+import json
 import os
 
 TASKS_FILE = "tasks.json"
@@ -15,4 +15,3 @@ def load_tasks() -> list:
 def save_tasks(tasks: list):
     with open(TASKS_FILE, "w") as f:
         json.dump(tasks, f, indent=4)
-    
