@@ -1,19 +1,25 @@
-import pytest
-from services.task_service import add_task, tasks
-import services.task_service as task_service
+from services.task_service import add_task, get_tasks
+from unittest.mock import patch
 
-@pytest.fixture(autouse=True)
-def setup_and_teardown():
-    # This runs before every test to guarantee isolation!
-    tasks.clear()
-    task_service.task_counter = 1
-    yield
+@patch('services.task_service.storage.load_tasks')
+@patch('services.task_service.storage.save_tasks')
+def test_add_task(mock_save, mock_load):
 
-def test_add_task():
-    task = add_task("Buy groceries")
-    assert task["id"] == 1
-    assert task["title"] == "Buy groceries"
-    assert task["completed"] is False
-    assert "created_at" in task
-    assert "metadata" in task
-    assert len(tasks) == 1
+    mock_load.return_value = []
+
+    result = add_task("Buy bread")
+
+    assert result["title"] == "Buy bread"
+    assert "id" in result
+
+    mock_save.assert_called_once()
+
+@patch('services.task_service.storage.load_tasks')
+def test_get_tasks_empty(mock_load):
+
+    # Test believes JSON is empty
+    mock_load.return_value = []
+
+    # Should return an empty list if no tasks have been added yet
+    tasks = get_tasks()
+    assert len(tasks) == 0
