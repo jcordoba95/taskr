@@ -6,7 +6,7 @@ def add_task(title: str) -> dict:
     """Creates a new task and adds it to the list."""
     tasks = storage.load_tasks()
     task = {
-        "id": str(uuid.uuid4()),    
+        "id": str(uuid.uuid4()),
         "title": title,
         "completed": False,
         "created_at": datetime.now().isoformat(),

@@ -1,6 +1,4 @@
-import pytest
 from services.task_service import add_task, get_tasks
-from services import storage
 from unittest.mock import patch
 
 @patch('services.task_service.storage.load_tasks')
@@ -8,9 +6,9 @@ from unittest.mock import patch
 def test_add_task(mock_save, mock_load):
 
     mock_load.return_value = []
-    
+
     result = add_task("Buy bread")
-    
+
     assert result["title"] == "Buy bread"
     assert "id" in result
 
