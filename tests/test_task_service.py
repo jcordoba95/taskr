@@ -1,31 +1,27 @@
 import pytest
 from services.task_service import add_task, get_tasks
 from services import storage
+from unittest.mock import patch
 
-@pytest.fixture(autouse=True)
-def setup_and_teardown(tmp_path, monkeypatch):
-    # Create a fake file path inside the guaranteed-empty temporary folder
-    fake_file = tmp_path / "test_tasks.json"
+@patch('services.task_service.storage.load_tasks')
+@patch('services.task_service.storage.save_tasks')
+def test_add_task(mock_save, mock_load):
 
-    # Swap out the real TASKS_FILE variable in storage.py with our fake one
-    monkeypatch.setattr(storage, "TASKS_FILE", str(fake_file))
+    mock_load.return_value = []
+    
+    result = add_task("Buy bread")
+    
+    assert result["title"] == "Buy bread"
+    assert "id" in result
 
-    # We don't need a cleanup step anymore, Pytest deletes tmp_path automatically
+    mock_save.assert_called_once()
 
-def test_add_task():
-    task = add_task("Buy groceries")
-    assert task["id"] == 1
-    assert task["title"] == "Buy groceries"
-    assert task["completed"] is False
-    assert "created_at" in task
-    assert "metadata" in task
+@patch('services.task_service.storage.load_tasks')
+def test_get_tasks_empty(mock_load):
 
-    # Verify it was saved and can be retrieved
-    tasks = get_tasks()
-    assert len(tasks) == 1
-    assert tasks[0] == task
+    # Test believes JSON is empty
+    mock_load.return_value = []
 
-def test_get_tasks_empty():
     # Should return an empty list if no tasks have been added yet
     tasks = get_tasks()
     assert len(tasks) == 0

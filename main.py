@@ -1,6 +1,19 @@
 import argparse
 from services.task_service import add_task, get_tasks
 
+def handle_command(args):
+    if args.command == "add":
+        task = add_task(args.title)
+        print(f"Task added: {task['title']}")
+    elif args.command == "list":
+        tasks = get_tasks()
+        if not tasks:
+            print("No tasks yet. Add one with: python main.py add <task>")
+        else:
+            for t in tasks:
+                status = "[x]" if t.get("completed") else "[ ]"
+                print(f"{t['id']}. {status} {t['title']}")
+
 def main():
     parser = argparse.ArgumentParser(description="Task CLI")
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
@@ -13,18 +26,7 @@ def main():
     subparsers.add_parser("list", help="List all tasks")
 
     args = parser.parse_args()
-
-    if args.command == "add":
-        task = add_task(args.title)
-        print(f"Task added: {task['title']}")
-    elif args.command == "list":
-        tasks = get_tasks()
-        if not tasks:
-            print("No tasks yet. Add one with: python main.py add <task>")
-        else:
-            for t in tasks:
-                status = "[x]" if t.get("completed") else "[ ]"
-                print(f"{t['id']}. {status} {t['title']}")
+    handle_command(args)
 
 if __name__ == "__main__":
     main()
